@@ -1,54 +1,35 @@
 const { bot } = require('../core/bot');
 const data = require('../mygeodata_merged.json');
-// const {Composer} = require('telegraf')
-const { ismchannel, admin } = require('../config')
-
-// const composer = new Composer()
+const { nameChannel } = require('../config')
 
 
-function ismTop(ism) {
-  let natija = data.find(item => {
-    return item.properties.name === ism;
+function findName(name) {
+  let result = data.find(item => {
+    return item.properties.name === name;
   })
-  if (natija !== undefined)
-    return natija.properties;
+  if (result !== undefined)
+    return result.properties;
   return "Ism topilmadi"
 }
 
-console.log(ismTop('iy'))
-
 
 bot.on('text', ctx => {
-
+  const input = ctx.message.text.charAt(0).toUpperCase() + ctx.message.text.slice(1)
+  const input2 = input.replace(/'/g, `‘`).replace(/`/g, `‘`).replace(/ʻ/g, `‘`).replace(/ʼ/g, `‘`);
+  let ism = findName(input2).name;
+  let mano = findName(input2).meaning;
+  let til = findName(input2).origin;
+  let jins = (findName(input2).gender == "M")? `💁🏻‍♂️  O'g'il bolalar ismi`: `💁🏻  Qiz bolalar ismi`
+  
   ctx.telegram.sendMessage(
-    ismchannel,
-    `<b>First name: </b> ${ctx.from.first_name}\n<b>Last name: </b> ${ctx.from.first_name}\nUsername: @${ctx.from.username}\nID: ${ctx.from.id}`,
+    nameChannel,
+    `<b>👤  First name: </b> ${ctx.from.first_name}\n<b>👤  Last name: </b> ${ctx.from.first_name}\n🔗  Username: @${ctx.from.username}\n🆔  <code>${ctx.from.id}</code>\n\n📥  Input:  <b>${ctx.message.text}</b>\n\n📤  Result:  ${mano || '<code> Error: name not found</code>'}`,
     {
       parse_mode: "HTML"
     }
   ).then()
 
-  let input = ctx.message.text.charAt(0).toUpperCase() + ctx.message.text.slice(1)
+  if (ism == undefined) return ctx.replyWithHTML(`Siz so'ragan ism Topilmadi :(\nIsmni tog'ri kiritganingizni tekshirib ko'ring.\n\nAgar sizning ismingiz haqida ma'lumot chiqmasa iltimos bizga habar bering.\nMurojaat uchun: 👉🏻  @Anuvarov`).then()
 
-  let ism = ismTop(input).name;
-  let mano = ismTop(input).meaning;
-  if (ism == undefined || mano == undefined) return ctx.replyWithHTML(`Siz so'ragan ism Topilmadi :(\nIsmni tog'ri kiritganingizni tekshirib ko'ring.\n\nAgar sizning ismingiz haqida ma'lumot chiqmasa iltimos bizga habar bering.\nMurojaat uchun: 👉🏻  @Anuvarov`).then()
-
-  ctx.replyWithHTML(`<b>Ism:</b> ${ism} \n<b>Ma'nosi: </b> ${mano}`).then()
-
-  console.log(ctx.message.text)
-
-
-
+  ctx.replyWithHTML(`<b>👤  ${ism}</b>\n🌐 <b> Kelib chiqishi: ${til}</b>\n${jins}\n\n<b>🗯 Ma'nosi: </b> ${mano}`).then()
 })
-
-
-// composer.on('text', ctx => {
-//   console.log(ctx.message.text)
-
-//   ctx.telegram.sendMessage(admin, `First name: ${ctx.from.first_name}\nID ${ctx.from.id}\n ${ctx.from.username}`).then()
-//   // ctx.telegram.sendVideo(confession, ctx.message.video.file_id).then()
-// })
-
-
-// bot.use(composer.middleware())

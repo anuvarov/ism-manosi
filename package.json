@@ -1,7 +1,7 @@
 {
   "name": "bot-main",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.0",
+  "description": "Bu bot orqali ismingizni ma'nosini bilib olishingiz mumkin",
   "main": "app.js",
   "directories": {
     "lib": "lib"
@@ -35,6 +35,6 @@
     "start": "node app",
     "dev": "nodemon app"
   },
-  "author": "",
+  "author": "Farid Anuvarov",
   "license": "ISC"
 }
