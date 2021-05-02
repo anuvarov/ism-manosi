@@ -3,7 +3,7 @@ Ismlar haqida malumotlar qaytaradi
 
 Botdan foydalanish uchun /start komandasini tering va ismingizni yozing va bot sizga darhol javob qaytaradi.
 
-Bot manzili: => @nominbot
+Bot manzili: => @nomingbot
 
 # Versions
 
