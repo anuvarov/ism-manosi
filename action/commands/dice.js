@@ -1,3 +1,31 @@
-const { bot } = require('../../core/bot')
+const { bot } = require('../../core/bot');
 
-bot.on('dice', ctx =>  ctx.replyWithDice().then())
+bot.on('dice', ctx => {
+    if (ctx.message.dice.emoji === "⚽")
+        ctx.telegram.sendDice(ctx.from.id, {
+            emoji: "⚽"
+        });
+
+    if (ctx.message.dice.emoji === "🏀")
+        ctx.telegram.sendDice(ctx.from.id, {
+            emoji: "🏀"
+        });
+
+    if (ctx.message.dice.emoji === "🎳")
+        ctx.telegram.sendDice(ctx.from.id, {
+            emoji: "🎳"
+        });
+
+    if (ctx.message.dice.emoji === "🎰")
+        ctx.telegram.sendDice(ctx.from.id, {
+            emoji: "🎰"
+        });
+    if (ctx.message.dice.emoji === "🎲")
+        ctx.telegram.sendDice(ctx.from.id, {
+            emoji: "🎲"
+        });
+    if (ctx.message.dice.emoji === "🎯")
+        ctx.telegram.sendDice(ctx.from.id, {
+            emoji: "🎯"
+        });
+});
