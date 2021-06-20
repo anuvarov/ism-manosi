@@ -74,7 +74,7 @@ composer.hears('rubl', ctx => {
 });
 
 composer.hears('val', ctx => {
-    let job = new CronJob('0 0 * * * *', function () {
+    let job = new CronJob('30 16 * * *', function () {
         ctx.telegram.sendMessage(admin, `${dollar}\n\n${yevro}\n\n${rubl}`).then();
     }, null, true);
 
