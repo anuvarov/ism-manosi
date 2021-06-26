@@ -1,2 +1,2 @@
 require('./commands')
-// require('./types')
+require('./admin');
