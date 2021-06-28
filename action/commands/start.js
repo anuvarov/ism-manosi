@@ -21,10 +21,13 @@ composer.command('start', async ctx => {
         return
     };
 
-    registrUser(userId, username, fullName, user);
+    registrUser(ctx, user);
 });
 
-async function registrUser(userId, username, fullName, user) {
+async function registrUser(ctx, user) {
+    const userId = ctx.from.id;
+    const fullName = `${ctx.from.first_name} / ${ctx.from.last_name}`;
+    const username = ctx.from.username;
     user = new User({
         userId,
         username,

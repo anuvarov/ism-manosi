@@ -26,6 +26,10 @@ const UserSchema = new mongoose.Schema({
     step: {
         type: Number,
         default: 0,
+    },
+    photosId: {
+        type: Array,
+        default: [],
     }
 });
 
