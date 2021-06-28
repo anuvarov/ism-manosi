@@ -25,11 +25,15 @@ const UserSchema = new mongoose.Schema({
     },
     step: {
         type: Number,
-        default: 0,
+        default: 1,
     },
     photosId: {
         type: Array,
         default: [],
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
     }
 });
 
