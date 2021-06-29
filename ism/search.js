@@ -1,10 +1,12 @@
-const { bot } = require('../core/bot');
 const { channel } = require('../config');
 const { validate } = require('../db/fuctions');
 const { validInp, channelPost } = require('./functions');
 
-bot.on('text', async ctx => {
-  await validate(ctx);
+exports.searchName = async (ctx) => {
+  await validate(ctx).then().catch(err => {
+    if (err)
+      throw err;
+  });
 
   ctx.replyWithHTML(validInp(ctx))
     .then()
@@ -15,4 +17,4 @@ bot.on('text', async ctx => {
   })
     .then()
     .catch(err => console.log(err));
-});
+}

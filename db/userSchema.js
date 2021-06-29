@@ -34,6 +34,10 @@ const UserSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true,
+    },
+    message: {
+        type: String,
+        default: 'not exist'
     }
 });
 

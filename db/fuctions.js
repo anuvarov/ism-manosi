@@ -1,4 +1,6 @@
+const { bot } = require('../core/bot');
 const { User } = require('./userSchema');
+const { adminId } = require('../config');
 
 exports.validate = async ctx => {
     console.log('validate function')
@@ -14,11 +16,10 @@ exports.validate = async ctx => {
         username,
         fullName,
     });
-    if (user.userId === 920035680)
+    if (user.userId === adminId)
         user.isAdmin = true;
     await user.save();
 };
-
 
 const updateStep = async user => {
     console.log('update function')
@@ -27,14 +28,30 @@ const updateStep = async user => {
     await user.save();
     return;
 }
-
 exports.updateStep = updateStep;
 
-exports.isAdmin = async ctx => {
+exports.step0 = async () => {
+    await User.findOneAndUpdate({ userId: adminId }, {
+        $set: {
+            step: 0
+        }
+    }).then().catch(err => {
+        if (err)
+            throw err;
+    });
+}
+
+exports.getStep = async () => {
+    let step = await User.findOne({ userId: adminId });
+
+    step = step.step;
+    return step;
+}
+
+exports.isAdmin = async () => {
     console.log('isAdmin function')
-    const userId = ctx.from.id;
-    const user = await User.findOne({ userId: userId });
-    if (userId === user.userId)
+    const user = await User.find({ userId: adminId });
+    if (user)
         return true;
     return false;
 }
@@ -59,4 +76,45 @@ function formatData(d) {
     const min = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
 
     return `${day}.${month}.${year} \t${hour}:${min}`
+}
+
+exports.getSubsc = async () => {
+    const users = await User
+        .find()
+        .sort({ date: -1 });
+    const activeUsers = await User
+        .find({ isActive: true });
+
+return `Active Users: -->${activeUsers}`
+}
+
+exports.sendMessageAll = async () => {
+    const users = await User.find({ isActive: true });
+    const admin = await User.findOne({ userId: adminId });
+    const usersId = users.map(user => user.userId);
+console.log(admin)
+    usersId.forEach(userId => {
+        bot.telegram.sendMessage(userId, admin.message, {
+            parse_mode: 'HTML'
+        })
+            .then(mes => bot.telegram.sendMessage(adminId, `Success\n\nMessage: --> ${mes}\n\nuserId; --> ${userId}`))
+            .catch(async err => {
+                if (err.code === 403) {
+                    await User.findOneAndUpdate({ userId: userId }, {
+                        $set: {
+                            isActive: false
+                        }
+                    })
+                }
+            });
+    });
+}
+
+exports.saveMessage = async ctx => {
+    const text = ctx.message.text;
+    await User.findOneAndUpdate({ userId: adminId }, {
+        $set: {
+            message: text
+        }
+    }).then().catch(err => console.log(err));
 }

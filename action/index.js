@@ -1,2 +1,2 @@
 require('./commands')
-require('./admin');
+require('./text')
